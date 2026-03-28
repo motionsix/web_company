@@ -1,9 +1,9 @@
 import { useState } from 'react';
+import { useLang } from '../contexts/LanguageContext';
+import { tx } from '../data/translations';
 
-const services = [
+const servicesMeta = [
   {
-    title: 'Immersive Experience',
-    description: 'สร้างประสบการณ์ที่ดื่มด่ำและน่าประทับใจด้วยเทคโนโลยีล้ำสมัย',
     image: '/services/immersive.jpg',
     gradient: 'from-info/80 to-info/20',
     accent: 'info',
@@ -14,8 +14,6 @@ const services = [
     ),
   },
   {
-    title: 'Interactive Media',
-    description: 'พัฒนาสื่อโต้ตอบที่สร้างสรรค์และมีส่วนร่วม',
     image: '/services/interactive.jpg',
     gradient: 'from-accent/80 to-accent/20',
     accent: 'accent',
@@ -26,8 +24,6 @@ const services = [
     ),
   },
   {
-    title: 'Digital Platform Solutions',
-    description: 'ออกแบบและพัฒนาแพลตฟอร์มดิจิทัลที่ตอบโจทย์ธุรกิจและกิจกรรม',
     image: '/services/digital.jpg',
     gradient: 'from-secondary/80 to-secondary/20',
     accent: 'secondary',
@@ -39,23 +35,31 @@ const services = [
   },
 ] as const;
 
-function ServiceCard({ service }: { service: (typeof services)[number] }) {
+interface ServiceCardProps {
+  title: string;
+  description: string;
+  image: string;
+  gradient: string;
+  accent: string;
+  icon: React.ReactNode;
+}
+
+function ServiceCard({ title, description, image, gradient, accent, icon }: ServiceCardProps) {
   const [imgFailed, setImgFailed] = useState(false);
 
   return (
     <div className="group relative rounded-2xl overflow-hidden h-72 md:h-80 cursor-pointer ring-1 ring-base-content/5 transition-all duration-500 hover:ring-base-content/10 hover:shadow-2xl hover:-translate-y-1">
-      {/* Background: image or gradient fallback */}
       {!imgFailed ? (
         <img
-          src={service.image}
-          alt={service.title}
+          src={image}
+          alt={title}
           loading="lazy"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           onError={() => setImgFailed(true)}
         />
       ) : (
-        <div className={`absolute inset-0 bg-linear-to-br ${service.gradient}`}>
+        <div className={`absolute inset-0 bg-linear-to-br ${gradient}`}>
           <div
             className="absolute inset-0 opacity-[0.04]"
             style={{
@@ -64,24 +68,20 @@ function ServiceCard({ service }: { service: (typeof services)[number] }) {
             }}
           />
           <div className="absolute inset-0 flex items-center justify-center text-white/30">
-            {service.icon}
+            {icon}
           </div>
         </div>
       )}
-
-      {/* Overlay */}
       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent group-hover:from-black/90 transition-all duration-500" />
-
-      {/* Content */}
       <div className="relative h-full flex flex-col justify-end p-5 md:p-7">
         <div className={`inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm text-white mb-3 transition-transform duration-500 group-hover:scale-110`}>
-          {service.icon}
+          {icon}
         </div>
         <h3 className="text-lg md:text-2xl montserrat-600 text-white mb-2 transition-transform duration-500 group-hover:translate-y-[-4px]">
-          {service.title}
+          {title}
         </h3>
         <p className="text-xs md:text-sm montserrat-300 text-white/70 opacity-100 md:opacity-0 md:group-hover:opacity-100 md:translate-y-3 md:group-hover:translate-y-0 transition-all duration-500 line-clamp-3">
-          {service.description}
+          {description}
         </p>
       </div>
     </div>
@@ -89,31 +89,42 @@ function ServiceCard({ service }: { service: (typeof services)[number] }) {
 }
 
 function Services() {
+  const { lang } = useLang();
+
   return (
     <section id="services" className="relative bg-base-100 py-20 md:py-32 overflow-hidden">
       {/* Decorative background */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-linear-to-r from-transparent via-base-content/10 to-transparent" />
-        <div className="absolute -top-40 left-1/3 w-80 h-80 bg-info/5 rounded-full blur-[120px]" />
-        <div className="absolute -bottom-40 right-1/3 w-80 h-80 bg-secondary/5 rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-linear-to-r from-transparent via-info/20 to-transparent" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-linear-to-r from-transparent via-secondary/20 to-transparent" />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-4 z-10">
         {/* Section header */}
         <div className="text-center mb-12 md:mb-16">
-          <span className="inline-block text-xs montserrat-500 tracking-[0.2em] uppercase text-info mb-3">What We Do</span>
+          <span className="inline-block text-xs montserrat-500 tracking-[0.2em] uppercase text-info mb-3">
+            {tx.services.subtitle[lang]}
+          </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl montserrat-700 text-base-content">
-            OUR <span className="text-info">SERVICES</span>
+            {tx.services.titlePrefix[lang]} <span className="text-info">{tx.services.titleHighlight[lang]}</span>
           </h2>
           <div className="mt-4 h-1 w-16 md:w-20 bg-linear-to-r from-info to-info/30 mx-auto rounded-full" />
           <p className="mt-6 text-sm md:text-base text-base-content/50 montserrat-300 max-w-2xl mx-auto">
-            ผสมผสานเทคโนโลยีและความคิดสร้างสรรค์เพื่อสร้างประสบการณ์ที่ไม่เหมือนใคร
+            {tx.services.description[lang]}
           </p>
         </div>
 
         <div className="grid gap-5 md:gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service) => (
-            <ServiceCard key={service.title} service={service} />
+          {tx.services.items.map((item, i) => (
+            <ServiceCard
+              key={item.title}
+              title={item.title}
+              description={item.description[lang]}
+              image={servicesMeta[i].image}
+              gradient={servicesMeta[i].gradient}
+              accent={servicesMeta[i].accent}
+              icon={servicesMeta[i].icon}
+            />
           ))}
         </div>
       </div>

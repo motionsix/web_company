@@ -1,5 +1,7 @@
 import { useEffect, useCallback, useState, useRef } from 'react';
 import type { ClientData } from '../data/portfolios';
+import { useLang } from '../contexts/LanguageContext';
+import { tx } from '../data/translations';
 
 interface Props {
   client: ClientData;
@@ -133,6 +135,8 @@ function VideoPlayer({ url }: { url: string }) {
 }
 
 export default function PortfolioModal({ client, onClose }: Props) {
+  const { lang } = useLang();
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -152,13 +156,17 @@ export default function PortfolioModal({ client, onClose }: Props) {
   const hasPortfolio = client.portfolio.length > 0 &&
     client.portfolio.some(p => p.images.length > 0 || (p.videos && p.videos.length > 0));
 
+  const clientName = client.name[lang];
+  const projectCount = client.portfolio.length;
+  const projectLabel = projectCount === 1 ? tx.portfolio.project[lang] : tx.portfolio.projects[lang];
+
   return (
     <div
       className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label={`${client.name} portfolio`}
+      aria-label={`${clientName} portfolio`}
     >
       {/* Backdrop */}
       <div className="fixed inset-0 bg-black/70 backdrop-blur-md animate-[fadeIn_0.2s_ease-out]" aria-hidden="true" />
@@ -190,12 +198,12 @@ export default function PortfolioModal({ client, onClose }: Props) {
               <div className="w-18 h-18 md:w-22 md:h-22 shrink-0 client-card rounded-2xl shadow-xl ring-1 ring-base-content/10 flex items-center justify-center p-3">
                 <img
                   src={client.logo}
-                  alt={`${client.name} logo`}
+                  alt={`${clientName} logo`}
                   className="max-w-full max-h-full object-contain"
                 />
               </div>
               <div className="pb-1">
-                <h3 className="text-2xl md:text-3xl montserrat-700 text-base-content leading-tight">{client.name}</h3>
+                <h3 className="text-2xl md:text-3xl montserrat-700 text-base-content leading-tight">{clientName}</h3>
                 <div className="flex items-center gap-2 mt-1.5">
                   <span className="inline-flex items-center gap-1 text-xs montserrat-500 px-2.5 py-1 rounded-full" style={{ color: client.color, backgroundColor: `${client.color}15` }}>
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -206,7 +214,7 @@ export default function PortfolioModal({ client, onClose }: Props) {
                   </span>
                   {hasPortfolio && (
                     <span className="text-xs montserrat-400 text-base-content/40">
-                      {client.portfolio.length} {client.portfolio.length === 1 ? 'project' : 'projects'}
+                      {projectCount} {projectLabel}
                     </span>
                   )}
                 </div>
@@ -226,9 +234,9 @@ export default function PortfolioModal({ client, onClose }: Props) {
                     </svg>
                   </div>
                 </div>
-                <p className="text-lg text-base-content/60 montserrat-500">Coming Soon</p>
+                <p className="text-lg text-base-content/60 montserrat-500">{tx.portfolio.comingSoon[lang]}</p>
                 <p className="text-sm text-base-content/30 montserrat-300 mt-2 max-w-xs mx-auto">
-                  ผลงานกำลังจะถูกเพิ่มเร็วๆ นี้ รอติดตามนะครับ
+                  {tx.portfolio.comingSoonDesc[lang]}
                 </p>
               </div>
             ) : (
@@ -243,9 +251,9 @@ export default function PortfolioModal({ client, onClose }: Props) {
                         </span>
                       )}
                       <div>
-                        <h4 className="text-lg md:text-xl montserrat-600 text-base-content leading-snug">{item.title}</h4>
+                        <h4 className="text-lg md:text-xl montserrat-600 text-base-content leading-snug">{item.title[lang]}</h4>
                         <p className="text-sm md:text-base text-base-content/60 montserrat-300 leading-relaxed mt-2 whitespace-pre-line">
-                          {item.description}
+                          {item.description[lang]}
                         </p>
                       </div>
                     </div>
@@ -276,14 +284,14 @@ export default function PortfolioModal({ client, onClose }: Props) {
 
           {/* Footer */}
           <div className="px-6 md:px-8 py-4 border-t border-base-content/5 bg-base-200/30 flex items-center justify-between">
-                <p className="text-sm montserrat-500" style={{ color: `${client.color}90` }}>
-              {client.name} &times; MotionSix Studio
+            <p className="text-sm montserrat-500" style={{ color: `${client.color}90` }}>
+              {clientName} &times; MotionSix Studio
             </p>
             <button
               onClick={onClose}
               className="btn btn-sm btn-ghost montserrat-400 gap-1 text-base-content/60 hover:text-base-content"
             >
-              ปิด
+              {tx.portfolio.close[lang]}
               <kbd className="hidden md:inline-flex kbd kbd-xs text-base-content/30">Esc</kbd>
             </button>
           </div>

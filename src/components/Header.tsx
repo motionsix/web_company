@@ -1,4 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
+import { useLang } from '../contexts/LanguageContext';
+import { tx } from '../data/translations';
 
 const LOGO_DARK = "/Logo/Logo_W.svg";
 const LOGO_LIGHT = "/Logo/Logo_B.svg";
@@ -8,6 +10,7 @@ function Header() {
     () => document.documentElement.getAttribute('data-theme') || 'dark'
   );
   const btnRef = useRef<HTMLButtonElement>(null);
+  const { lang, toggleLang } = useLang();
 
   const applyTheme = useCallback((next: string) => {
     document.documentElement.setAttribute('data-theme', next);
@@ -56,36 +59,53 @@ function Header() {
   const isDark = theme === 'dark';
   const logoSrc = isDark ? LOGO_DARK : LOGO_LIGHT;
 
+  const LangToggle = () => (
+    <button
+      onClick={toggleLang}
+      className="btn btn-ghost btn-sm montserrat-500 text-xs px-2 text-base-content/70 hover:text-base-content"
+      aria-label="Toggle language"
+    >
+      <span className={lang === 'th' ? 'text-base-content' : 'text-base-content/30'}>TH</span>
+      <span className="text-base-content/20 mx-0.5">/</span>
+      <span className={lang === 'en' ? 'text-base-content' : 'text-base-content/30'}>EN</span>
+    </button>
+  );
+
+  const ThemeToggle = ({ refProp }: { refProp?: React.RefObject<HTMLButtonElement> }) => (
+    <button
+      ref={refProp}
+      onClick={toggleTheme}
+      className="btn btn-ghost btn-circle btn-sm text-base-content"
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+    >
+      {isDark ? (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      ) : (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      )}
+    </button>
+  );
+
   return (
     <header className="sticky top-0 bg-base-100/70 backdrop-blur border-b border-base-300 z-50 transition-colors duration-300">
       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
         <a href="#" className="flex items-center" aria-label="MOTIONSIX STUDIO home">
-          <img 
-            src={logoSrc} 
-            alt="MOTIONSIX STUDIO logo" 
-            className="h-8 md:h-12 w-auto" 
+          <img
+            src={logoSrc}
+            alt="MOTIONSIX STUDIO logo"
+            className="h-8 md:h-12 w-auto"
             height={48}
           />
         </a>
 
         {/* Mobile */}
         <div className="flex items-center gap-1 md:hidden">
-          <button
-            ref={btnRef}
-            onClick={toggleTheme}
-            className="btn btn-ghost btn-circle btn-sm text-base-content"
-            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            {isDark ? (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-              </svg>
-            )}
-          </button>
+          <LangToggle />
+          <ThemeToggle refProp={btnRef} />
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle text-base-content hover:bg-base-content/10">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -95,17 +115,17 @@ function Header() {
             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-200 border border-base-300 rounded-lg w-52">
               <li>
                 <a href="#services" className="text-base-content hover:bg-info/20 hover:text-info montserrat-500 py-3">
-                  SERVICES
+                  {tx.nav.services[lang]}
                 </a>
-              </li> 
+              </li>
               <li>
                 <a href="#about" className="text-base-content hover:bg-accent/20 hover:text-accent montserrat-500 py-3">
-                  ABOUT
+                  {tx.nav.about[lang]}
                 </a>
               </li>
               <li>
                 <a href="#contact" className="text-base-content hover:bg-secondary/20 hover:text-secondary montserrat-500 py-3">
-                  CONTACT
+                  {tx.nav.contact[lang]}
                 </a>
               </li>
             </ul>
@@ -113,28 +133,16 @@ function Header() {
         </div>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-4">
           <nav className="flex gap-6 montserrat-500 text-lg">
-            <a href="#services" className="text-base-content hover:text-info transition-colors">SERVICES</a>
-            <a href="#about" className="text-base-content hover:text-accent transition-colors">ABOUT</a>
-            <a href="#contact" className="text-base-content hover:text-secondary transition-colors">CONTACT</a>
+            <a href="#services" className="text-base-content hover:text-info transition-colors">{tx.nav.services[lang]}</a>
+            <a href="#about" className="text-base-content hover:text-accent transition-colors">{tx.nav.about[lang]}</a>
+            <a href="#contact" className="text-base-content hover:text-secondary transition-colors">{tx.nav.contact[lang]}</a>
           </nav>
-          <button
-            ref={btnRef}
-            onClick={toggleTheme}
-            className="btn btn-ghost btn-circle btn-sm text-base-content"
-            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            {isDark ? (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-              </svg>
-            )}
-          </button>
+          <div className="flex items-center gap-1">
+            <LangToggle />
+            <ThemeToggle refProp={btnRef} />
+          </div>
         </div>
       </div>
     </header>

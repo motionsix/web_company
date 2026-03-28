@@ -1,4 +1,5 @@
 import ErrorBoundary from "./components/ErrorBoundary";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Services from "./components/Services";
@@ -10,6 +11,7 @@ import Footer from "./components/Footer";
 export default function App() {
   return (
     <ErrorBoundary>
+      <LanguageProvider>
       <div className="min-h-screen flex flex-col bg-base-100">
         <Header />
         <main className="flex-1">
@@ -21,6 +23,7 @@ export default function App() {
         </main>
         <Footer />
       </div>
+      </LanguageProvider>
     </ErrorBoundary>
   )
 }
