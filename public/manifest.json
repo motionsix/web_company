@@ -1,0 +1,17 @@
+{
+  "name": "MotionSix Studio",
+  "short_name": "MotionSix",
+  "description": "Building games, events, and immersive experiences",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/logo_1-1_1.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

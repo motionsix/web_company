@@ -1,0 +1,147 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* Global font family and background */
+:root {
+  font-family: "Montserrat", "Kanit", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body, html {
+  background-color: var(--color-base-100, #000000);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* View Transition: theme toggle circle reveal */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+/* Modal animations */
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Client card glass style per theme */
+.client-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+[data-theme="dark"] .client-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Theme-aware logo visibility */
+[data-theme="light"] .logo-dark-only { display: none; }
+[data-theme="dark"] .logo-light-only { display: none; }
+
+/* Font weight helpers (Montserrat for EN, Kanit for TH) */
+.montserrat-100 { font-family: "Montserrat", "Kanit", sans-serif; font-optical-sizing: auto; font-weight: 100; font-style: normal; }
+.montserrat-200 { font-family: "Montserrat", "Kanit", sans-serif; font-optical-sizing: auto; font-weight: 200; font-style: normal; }
+.montserrat-300 { font-family: "Montserrat", "Kanit", sans-serif; font-optical-sizing: auto; font-weight: 300; font-style: normal; }
+.montserrat-400 { font-family: "Montserrat", "Kanit", sans-serif; font-optical-sizing: auto; font-weight: 400; font-style: normal; }
+.montserrat-500 { font-family: "Montserrat", "Kanit", sans-serif; font-optical-sizing: auto; font-weight: 500; font-style: normal; }
+.montserrat-600 { font-family: "Montserrat", "Kanit", sans-serif; font-optical-sizing: auto; font-weight: 600; font-style: normal; }
+.montserrat-700 { font-family: "Montserrat", "Kanit", sans-serif; font-optical-sizing: auto; font-weight: 700; font-style: normal; }
+.montserrat-800 { font-family: "Montserrat", "Kanit", sans-serif; font-optical-sizing: auto; font-weight: 800; font-style: normal; }
+.montserrat-900 { font-family: "Montserrat", "Kanit", sans-serif; font-optical-sizing: auto; font-weight: 900; font-style: normal; }
+
+
+
+@plugin "daisyui/theme" {
+    name: "light";
+    default: false;
+    prefersdark: false;
+    color-scheme: "light";
+    --color-base-100: oklch(100% 0 0);
+    --color-base-200: oklch(98% 0 0);
+    --color-base-300: oklch(95% 0 0);
+    --color-base-content: oklch(21% 0.006 285.885);
+    --color-primary: oklch(45% 0.24 277.023);
+    --color-primary-content: oklch(93% 0.034 272.788);
+    --color-secondary: oklch(0.5434 0.2057 359.87);
+    --color-secondary-content: oklch(94% 0.028 342.258);
+    --color-accent: oklch(0.7017 0.1647 145.67);
+    --color-accent-content: oklch(100% 0 0);
+    --color-neutral: oklch(14% 0.005 285.823);
+    --color-neutral-content: oklch(92% 0.004 286.32);
+    --color-info: oklch(0.606 0.1051 262.84);
+    --color-info-content: oklch(100% 0 0);
+    --color-success: oklch(76% 0.177 163.223);
+    --color-success-content: oklch(37% 0.077 168.94);
+    --color-warning: oklch(82% 0.189 84.429);
+    --color-warning-content: oklch(41% 0.112 45.904);
+    --color-error: oklch(71% 0.194 13.428);
+    --color-error-content: oklch(27% 0.105 12.094);
+    --radius-selector: 0.5rem;
+    --radius-field: 0.25rem;
+    --radius-box: 0.5rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 1;
+    --noise: 0;
+  }
+
+@plugin "daisyui/theme" {
+    name: "dark";
+    default: false;
+    prefersdark: true;
+    color-scheme: "dark";
+    --color-base-100: oklch(0% 0 0);
+    --color-base-200: oklch(13% 0.004 285);
+    --color-base-300: oklch(21% 0.006 285);
+    --color-base-content: oklch(95% 0.002 285);
+    --color-primary: oklch(50% 0.24 277.023);
+    --color-primary-content: oklch(93% 0.034 272.788);
+    --color-secondary: oklch(0.5434 0.2057 359.87);
+    --color-secondary-content: oklch(94% 0.028 342.258);
+    --color-accent: oklch(0.7017 0.1647 145.67);
+    --color-accent-content: oklch(100% 0 0);
+    --color-neutral: oklch(25% 0.005 285);
+    --color-neutral-content: oklch(92% 0.004 286.32);
+    --color-info: oklch(0.65 0.12 262.84);
+    --color-info-content: oklch(100% 0 0);
+    --color-success: oklch(76% 0.177 163.223);
+    --color-success-content: oklch(37% 0.077 168.94);
+    --color-warning: oklch(82% 0.189 84.429);
+    --color-warning-content: oklch(41% 0.112 45.904);
+    --color-error: oklch(71% 0.194 13.428);
+    --color-error-content: oklch(27% 0.105 12.094);
+    --radius-selector: 0.5rem;
+    --radius-field: 0.25rem;
+    --radius-box: 0.5rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 1;
+    --noise: 0;
+  }
+  
