@@ -71,7 +71,7 @@ function Header() {
     </button>
   );
 
-  const ThemeToggle = ({ refProp }: { refProp?: React.RefObject<HTMLButtonElement> }) => (
+  const ThemeToggle = ({ refProp }: { refProp?: React.RefObject<HTMLButtonElement | null> }) => (
     <button
       ref={refProp}
       onClick={toggleTheme}

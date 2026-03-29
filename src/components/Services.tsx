@@ -44,7 +44,7 @@ interface ServiceCardProps {
   icon: React.ReactNode;
 }
 
-function ServiceCard({ title, description, image, gradient, accent, icon }: ServiceCardProps) {
+function ServiceCard({ title, description, image, gradient, icon }: ServiceCardProps) {
   const [imgFailed, setImgFailed] = useState(false);
 
   return (
